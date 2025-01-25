@@ -16,8 +16,10 @@ def main(params):
     db= params.db
     table_name= params.table_name
     url = params.url
-
+    
+    # for local use
     parquet_name = '~/data/ny_taxi_data/yellow_tripdata_2021-01.parquet'
+    # parquet_name = 'yellow_tripdata_2021-01.parquet'
 
     csv_name = parquet_name.replace('parquet', 'csv')
     # download the csv

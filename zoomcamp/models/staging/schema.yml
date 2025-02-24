@@ -42,14 +42,14 @@ models:
         description: The number of passengers in the vehicle. This is a driver-entered value.
       - name: Trip_distance 
         description: The elapsed trip distance in miles reported by the taximeter.
-      - name: Pickup_locationid
+      - name: Pickup_location_id
         description: locationid where the meter was engaged.
         tests:
           - relationships:
               to: ref('taxi_zone_lookup')
               field: locationid
               severity: warn
-      - name: dropoff_locationid 
+      - name: dropoff_location_id 
         description: locationid where the meter was engaged.
         tests:
           - relationships:
@@ -120,7 +120,7 @@ models:
                 severity: warn
             - not_null:
                 severity: warn
-      - name: VendorID 
+      - name: Vendor_ID 
         description: > 
             A code indicating the TPEP provider that provided the record.
             1= Creative Mobile Technologies, LLC; 
@@ -133,19 +133,19 @@ models:
         description: The number of passengers in the vehicle. This is a driver-entered value.
       - name: Trip_distance 
         description: The elapsed trip distance in miles reported by the taximeter.
-      - name: Pickup_locationid
+      - name: Pickup_location_id
         description: locationid where the meter was engaged.
         tests:
           - relationships:
               to: ref('taxi_zone_lookup')
-              field: location_id
+              field: locationid
               severity: warn
-      - name: dropoff_locationid 
+      - name: dropoff_location_id 
         description: locationid where the meter was engaged.
         tests:
           - relationships:
               to: ref('taxi_zone_lookup')
-              field: location_id
+              field: locationid
               severity: warn
       - name: RateCodeID 
         description: >

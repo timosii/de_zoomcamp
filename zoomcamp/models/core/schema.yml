@@ -15,8 +15,8 @@ models:
       - name: revenue_monthly_total_amount
         description: Monthly sum of the the total_amount of the fare charged for the trip per pickup zone, month and service.
         tests:
-            - not_null:
-                severity: error
+          - not_null:
+              severity: error
       
   - name: fact_trips
     description: >
@@ -127,3 +127,5 @@ models:
       - name: payment_type_description
         data_type: string
         description: ""
+
+  - name: fct_taxi_trips_quarterly_revenue

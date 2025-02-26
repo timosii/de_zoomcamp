@@ -21,7 +21,7 @@ with trips_data as (
     sum(total_amount) as revenue_monthly_total_amount,
 
     -- Additional calculations
-    count(tripid) as total_monthly_trips,
+    count(trip_id) as total_monthly_trips,
     avg(passenger_count) as avg_monthly_passenger_count,
     avg(trip_distance) as avg_monthly_trip_distance
 

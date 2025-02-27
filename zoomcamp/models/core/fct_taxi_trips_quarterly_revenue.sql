@@ -2,12 +2,9 @@
 
 WITH quarterly_revenue AS (
     SELECT
-        -- Extract year and quarter from the pickup datetime
         EXTRACT(YEAR FROM pickup_datetime) AS year,
         EXTRACT(QUARTER FROM pickup_datetime) AS quarter,
-        -- Assuming there is a 'taxi_type' column to differentiate between Green and Yellow Taxis
         service_type,
-        -- Sum the total_amount for each quarter and taxi type
         SUM(total_amount) AS quarterly_revenue
     FROM
         {{ ref('fact_trips') }}
@@ -20,13 +17,20 @@ yoy_growth AS (
         curr.quarter,
         curr.service_type,
         curr.quarterly_revenue,
-        -- Calculate YoY growth
+        -- Get previous year's revenue
         LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year) AS prev_year_revenue,
-        ROUND(
-            ((curr.quarterly_revenue - LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year)) 
-            / LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year)) * 100, 
-            2
-        ) AS yoy_growth_percent
+        -- Calculate YoY growth, handling division by zero
+        CASE 
+            WHEN LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year) IS NULL 
+                 OR LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year) = 0 
+            THEN NULL
+            ELSE 
+                ROUND(
+                    ((curr.quarterly_revenue - LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year)) 
+                    / NULLIF(LAG(curr.quarterly_revenue) OVER (PARTITION BY curr.service_type, curr.quarter ORDER BY curr.year), 0)) * 100, 
+                    2
+                )
+        END AS yoy_growth_percent
     FROM
         quarterly_revenue curr
 )
@@ -40,4 +44,4 @@ SELECT
 FROM
     yoy_growth
 ORDER BY
-    year, quarter, service_type;
+    year, quarter, service_type
